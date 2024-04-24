@@ -18,3 +18,4 @@ const handlePaymentGateway = (amount, type) => {
 
 handlePaymentGateway(100.0, 'paypal');
 handlePaymentGateway(150.0, 'stripe');
+handlePaymentGateway(10, 'gcash');
