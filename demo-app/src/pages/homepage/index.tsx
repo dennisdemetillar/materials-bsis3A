@@ -1,4 +1,4 @@
-import Greetings from "./greetings.tsx";
+import Greetings from "./greetings";
 
 const HomePage = () => {
   return (

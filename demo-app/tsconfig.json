@@ -20,7 +20,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/pages/dashboard/about"
+    "src/pages/dashboard/about",
+    "src/pages/homepage/greetings",
+    "src/pages/index.jsx"
   ],
   "exclude": ["node_modules"]
 }

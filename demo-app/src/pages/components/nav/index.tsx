@@ -8,7 +8,7 @@ interface NavBarProps {
 }
 
 const NavBar = ({ setSection }: NavBarProps) => {
-  const [section, setSectionState] = useState(1);
+  const [sectionState, setSectionState] = useState(1);
 
   const handleSectionClick = (sectionNumber: number) => {
     setSection(sectionNumber);
@@ -20,8 +20,8 @@ const NavBar = ({ setSection }: NavBarProps) => {
       <div className="flex mx-24 justify-evenly">
         <div
           className={`flex cursor-pointer items-center gap-x-2 p-4 rounded-full text-${
-            section === 1 ? "blue" : "white"
-          } bg-${section === 1 ? "white" : "blue"}`}
+            sectionState === 1 ? "blue" : "white"
+          } bg-${sectionState === 1 ? "white" : "blue"}`}
           onClick={() => handleSectionClick(1)}
         >
           <IoHomeOutline />
@@ -29,8 +29,8 @@ const NavBar = ({ setSection }: NavBarProps) => {
         </div>
         <div
           className={`flex cursor-pointer items-center gap-x-2 p-4 rounded-full text-${
-            section === 2 ? "blue" : "white"
-          } bg-${section === 2 ? "white" : "blue"}`}
+            sectionState === 2 ? "blue" : "white"
+          } bg-${sectionState === 2 ? "white" : "blue"}`}
           onClick={() => handleSectionClick(2)}
         >
           <CiCircleInfo />
@@ -38,8 +38,8 @@ const NavBar = ({ setSection }: NavBarProps) => {
         </div>
         <div
           className={`flex cursor-pointer items-center gap-x-2 p-4 rounded-full text-${
-            section === 3 ? "blue" : "white"
-          } bg-${section === 3 ? "white" : "blue"}`}
+            sectionState === 3 ? "blue" : "white"
+          } bg-${sectionState === 3 ? "white" : "blue"}`}
           onClick={() => handleSectionClick(3)}
         >
           <MdOutlineLocalOffer />
