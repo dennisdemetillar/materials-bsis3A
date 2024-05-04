@@ -22,23 +22,38 @@ const Chatbot = () => {
     <div>
       <div className="flex flex-col mx-10 p-10 rounded-3xl border border-white">
         <div className="overflow-auto mb-10 h-96 mx-20">
-          {messages.map((message, index) => (
-            <div className="flex flex-col gap-y-5" key={message.id}>
-              <div className="flex gap-x-4 text-white items-center">
-                <img
-                  src={message.role === "user" ? "./person.jpg" : "./sage.jpg"}
-                  alt="image"
-                  height={40}
-                  width={40}
-                />
-                <p className="text-white text-sm">{message.content}</p>
-              </div>
-              {index < messages.length - 1 && (
-                <div className="border-[0.5px] mb-5 border-white" />
-              )}
-              {index === messages.length - 1 && <div ref={messagesEndRef} />}
+          {messages.length === 0 ? (
+            <div className="text-white flex flex-col items-center gap-y-10">
+              <img
+                src="./sage.jpg"
+                height={150}
+                width={150}
+                className="rounded-lg"
+              />
+              <p>Ask me Anything Young One</p>
             </div>
-          ))}
+          ) : (
+            messages.map((message, index) => (
+              <div className="flex flex-col gap-y-5" key={message.id}>
+                <div className="flex gap-x-4 text-white items-center">
+                  <img
+                    className="rounded-full"
+                    src={
+                      message.role === "user" ? "./person.jpg" : "./sage.jpg"
+                    }
+                    alt="image"
+                    height={40}
+                    width={40}
+                  />
+                  <p className="text-white text-sm">{message.content}</p>
+                </div>
+                {index < messages.length - 1 && (
+                  <div className="border-[0.5px] mb-5 border-white" />
+                )}
+                {index === messages.length - 1 && <div ref={messagesEndRef} />}
+              </div>
+            ))
+          )}
         </div>
         <form onSubmit={handleSubmit} className="flex w-full gap-x-2">
           <Input
@@ -53,10 +68,9 @@ const Chatbot = () => {
             icon={
               isLoading ? (
                 <Spin
-                  className="bg-white"
                   indicator={
                     <LoadingOutlined
-                      style={{ fontSize: 24, color: "black" }}
+                      style={{ fontSize: 15, color: "white" }}
                       spin
                     />
                   }
