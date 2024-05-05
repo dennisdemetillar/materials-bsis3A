@@ -18,6 +18,27 @@ const Chatbot = () => {
     scrollToBottom();
   }, [messages]);
 
+  const renderResponse = () => {
+    return messages.map((message, index) => (
+      <div className="flex flex-col gap-y-5" key={message.id}>
+        <div className="flex gap-x-4 text-white items-center">
+          <img
+            className="rounded-full"
+            src={message.role === "user" ? "./person.jpg" : "./sage.jpg"}
+            alt="image"
+            height={40}
+            width={40}
+          />
+          <p className="text-white text-sm">{message.content}</p>
+        </div>
+        {index < messages.length - 1 && (
+          <div className="border-[0.5px] mb-5 border-white" />
+        )}
+        {index === messages.length - 1 && <div ref={messagesEndRef} />}
+      </div>
+    ));
+  };
+
   return (
     <div>
       <div className="flex flex-col mx-10 p-10 rounded-3xl border border-white">
@@ -33,26 +54,7 @@ const Chatbot = () => {
               <p>Ask me Anything Young One</p>
             </div>
           ) : (
-            messages.map((message, index) => (
-              <div className="flex flex-col gap-y-5" key={message.id}>
-                <div className="flex gap-x-4 text-white items-center">
-                  <img
-                    className="rounded-full"
-                    src={
-                      message.role === "user" ? "./person.jpg" : "./sage.jpg"
-                    }
-                    alt="image"
-                    height={40}
-                    width={40}
-                  />
-                  <p className="text-white text-sm">{message.content}</p>
-                </div>
-                {index < messages.length - 1 && (
-                  <div className="border-[0.5px] mb-5 border-white" />
-                )}
-                {index === messages.length - 1 && <div ref={messagesEndRef} />}
-              </div>
-            ))
+            renderResponse()
           )}
         </div>
         <form onSubmit={handleSubmit} className="flex w-full gap-x-2">
