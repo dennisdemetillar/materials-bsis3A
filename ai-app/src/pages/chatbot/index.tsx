@@ -1,7 +1,6 @@
 import { useChat } from "ai/react";
 import { Input, Button, Spin } from "antd";
 import { IoMdSend } from "react-icons/io";
-import { LoadingOutlined } from "@ant-design/icons";
 import { useEffect, useRef } from "react";
 
 const Chatbot = () => {
@@ -67,20 +66,7 @@ const Chatbot = () => {
           <Button
             htmlType="submit"
             disabled={isLoading}
-            icon={
-              isLoading ? (
-                <Spin
-                  indicator={
-                    <LoadingOutlined
-                      style={{ fontSize: 15, color: "white" }}
-                      spin
-                    />
-                  }
-                />
-              ) : (
-                <IoMdSend />
-              )
-            }
+            icon={isLoading ? <Spin /> : <IoMdSend />}
           />
         </form>
       </div>
