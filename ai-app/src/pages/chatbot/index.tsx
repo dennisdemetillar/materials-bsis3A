@@ -24,7 +24,7 @@ const Chatbot = () => {
         <div className="flex gap-x-4 text-white items-center">
           <Image
             className="rounded-full"
-            src={message.role === "user" ? "./person.jpg" : "./sage.jpg"}
+            src={message.role === "user" ? "/person.jpg" : "/sage.jpg"}
             alt="image"
             height={40}
             width={40}
@@ -46,7 +46,7 @@ const Chatbot = () => {
           {messages.length === 0 ? (
             <div className="text-white flex flex-col items-center gap-y-10">
               <Image
-                src="./sage.jpg"
+                src="/sage.jpg"
                 height={150}
                 width={150}
                 className="rounded-lg"
