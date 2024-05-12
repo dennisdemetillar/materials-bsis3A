@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || "",
@@ -8,10 +9,18 @@ const openai = new OpenAI({
 
 export const runtime = "edge";
 
-export default async function POST(req: Request) {
+export default async function POST(req: NextRequest) {
   try {
     if (!process.env.NEXT_PUBLIC_OPENAI_API_KEY) {
       return new NextResponse("Missing OpenAI API Key.", { status: 400 });
+    }
+    const { userId } = getAuth(req);
+    const user = await clerkClient.users.getUser(String(userId));
+
+    const credits = Number(user?.unsafeMetadata?.credits || 0);
+
+    if (!credits) {
+      return new NextResponse("You have no credits left.", { status: 401 });
     }
 
     const { messages } = await req.json();
@@ -31,6 +40,12 @@ export default async function POST(req: Request) {
         ...messages,
       ],
       stream: true,
+    });
+
+    await clerkClient.users.updateUserMetadata(String(userId), {
+      unsafeMetadata: {
+        credits: credits - 1,
+      },
     });
 
     const stream = OpenAIStream(response);
