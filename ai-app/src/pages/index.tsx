@@ -1,18 +1,31 @@
-import Chatbot from "./chatbot";
+import { useEffect } from "react";
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useAuth } from "@clerk/nextjs";
+import { Spin } from "antd";
+import SignInPage from "./sign-in/[[...index]]";
 
-export default function Home() {
-  return (
-    <>
-      <div className="flex items-center gap-y-3 flex-col py-10">
-        <h1 className="tracking-tight text-4xl sm:text-6xl font-bold text-white">
-          Sage of the books
-        </h1>
-        <p className="max-w-xl text-center text-lg text-slate-400">
-          A wise entity steeped in all knowledge, earned through the mastery of
-          every tome on Earth
-        </p>
+const Home: NextPage = () => {
+  const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.push(`/chatbot`);
+    } else {
+      router.push(`/sign-in`);
+    }
+  }, [router, isLoaded, isSignedIn]);
+
+  if (!isLoaded) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spin size="large" />
       </div>
-      <Chatbot />
-    </>
-  );
-}
+    );
+  }
+
+  return <div />;
+};
+
+export default Home;
