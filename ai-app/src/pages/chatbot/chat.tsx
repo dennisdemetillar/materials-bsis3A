@@ -3,28 +3,52 @@ import { Input, Button, Spin, notification } from "antd";
 import { IoMdSend } from "react-icons/io";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-// import { AddFreeCredits } from "@/utils/action";
-import { useSession, useAuth, useClerk, useUser } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import { FiZap } from "react-icons/fi";
-import { clerkClient } from "@clerk/nextjs/server";
 
 const Chat = () => {
-  // const session = useSession();
   const { session } = useClerk();
-  // const { isLoaded, isSignedIn } = useAuth();
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { user } = useUser();
 
-  // const credits = session?.session?.user?.publicMetadata?.credits;
-  const credits = user?.publicMetadata?.credits;
+  const credits = user?.unsafeMetadata?.credits;
   const newUser = typeof credits === "undefined";
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
-    useChat();
+    useChat({
+      onResponse: (response) => {
+        if (!response.ok) {
+          const status = response.status;
+
+          if (status === 401) {
+            notification.error({
+              message: "Error",
+              description: "You have no credits left.",
+            });
+          }
+        }
+        session?.reload();
+      },
+    });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleClick = async () => {
+    await user?.update({
+      unsafeMetadata: {
+        credits: 10,
+      },
+    });
+
+    notification.success({
+      message: "Success",
+      description: "You have successfully reedemed 10 credits.",
+    });
+
+    await session?.reload();
   };
 
   useEffect(() => {
@@ -54,6 +78,25 @@ const Chat = () => {
 
   return (
     <div>
+      <div className="flex justify-end">
+        {newUser && (
+          <Button
+            className="m-5 mr-10 border-emerald-500 text-white"
+            type="primary"
+            style={{ backgroundColor: "#10b981" }}
+            onClick={handleClick}
+          >
+            Redeem 50 credits
+          </Button>
+        )}
+        {typeof credits === "number" && (
+          <div className="flex items-center gap-2 py-5 mr-20">
+            <FiZap className="h-5 w-5 text-emerald-500" />
+            <span className="text-sm text-zinc-300">Credits:</span>
+            <span className="font-medium text-white">{credits}</span>
+          </div>
+        )}
+      </div>
       <div className="flex flex-col mx-10 p-10 rounded-3xl border border-white">
         <div className="overflow-auto mb-10 h-96 mx-20">
           {messages.length === 0 ? (
